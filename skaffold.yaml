@@ -1,17 +1,19 @@
 apiVersion: skaffold/v2beta5
 kind: Config
+metadata:
+  name: app
 build:
+  insecureRegistries:
+    - 192.168.100.189:5000
   artifacts:
-    - image: localhost:5000/apps/demo
-#      custom:
-#        buildCommand: ./mvnw spring-boot:build-image -D spring-boot.build-image.imageName=$IMAGE && docker push $IMAGE
-      buildpacks:
-        builder: gcr.io/paketo-buildpacks/builder:base-platform-api-0.3
+    - image: 192.168.100.189:5000/apps/demo
+      custom:
+        buildCommand: mvn spring-boot:build-image -DskipTests=true -Dspring-boot.build-image.imageName=%IMAGE% && docker push %IMAGE%
         dependencies:
           paths:
-            - pom.xml
-            - src/main/resources
-            - target/classes
+          - pom.xml
+          - src/main/resources
+          - target/classes
       sync:
         manual:
           - src: "src/main/resources/**/*"
@@ -21,6 +23,13 @@ build:
             dest: /workspace/BOOT-INF/classes
             strip: target/classes/
 deploy:
+  kubeContext: minikube
   kustomize:
     paths:
       - "src/k8s/demo/"
+
+        #portForward:
+        #  - resourceType: pod
+        #    resourceName: app
+        #    port: 8080 #
+        #    localPort: 8080 # *Optional*

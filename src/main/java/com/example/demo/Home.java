@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class Home {
     @GetMapping("/")
     public String home() {
-        return "Hello World!!";
+        return "TAMARA, Hello World!! - Biergarten, weil die Sonne wieder da ist, mal ist sie wieder weg";
     }
 }

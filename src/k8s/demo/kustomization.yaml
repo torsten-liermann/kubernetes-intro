@@ -4,7 +4,7 @@ commonLabels:
   app: app
 images:
   - name: apps/demo
-    newName: localhost:5000/apps/demo
+    newName: 192.168.100.189:5000/apps/demo
 resources:
 - deployment.yaml
 transformers:
